@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { getDigipet } from "./digipet/model";
-import { hatchDigipet, walkDigipet } from "./digipet/controller";
+import { getDigipet,INITIAL_DIGIPET } from "./digipet/model";
+import { hatchDigipet, walkDigipet, trainDigipet, feedDigipet, ignoreDigipet, rehomeDigipet } from "./digipet/controller";
 
 const app = express();
 
@@ -71,5 +71,120 @@ app.get("/digipet/walk", (req, res) => {
     });
   }
 });
+
+app.get("/digipet/train", (req, res) => {
+  // check the user has a digipet to train
+  if (getDigipet()) {
+    trainDigipet();
+    res.json({
+      message: "You trained your digipet. It looks more trained now!",
+      digipet: getDigipet(),
+    });
+  } else {
+    res.json({
+      message:
+        "You don't have a digipet to train! Try hatching one with /digipet/hatch",
+    });
+  }
+});
+
+app.get("/digipet/feed", (req, res) => {
+  // check the user has a digipet to train
+  if (getDigipet()) {
+    feedDigipet();
+    res.json({
+      message: "Feed your digipet. It will look more happy!",
+      digipet: getDigipet(),
+    });
+  } else {
+    res.json({
+      message:
+        "You don't have a digipet to feed! Try hatching one with /digipet/hatch",
+    });
+  }
+});
+
+app.get("/digipet/ignore", (req, res) => {
+  // check the user has a digipet to ignore
+  const digipet = getDigipet()
+  if (digipet === null) {
+    res.json({
+      message:
+        "You don't have a digipet! Try hatching one with /digipet/hatch",
+    });
+  } else if (digipet.happiness > 10 && digipet.nutrition >10 && digipet.discipline > 10) {
+    ignoreDigipet()
+    res.json({
+      message:
+        `We have ignored your digipet, all stats were decreased 10 by now`,
+        digipet: getDigipet()
+    });
+  } else if (digipet.happiness <= 10 && digipet.nutrition <= 10 && digipet.discipline <= 10) {
+    ignoreDigipet()
+    res.json({
+      message:
+        `We have ignored your digipet, all stats were decreased 10 by now and might be 0`,
+        digipet: getDigipet(),
+    })};
+});
+
+// app.get("/digipet/ignore", (req, res) => {
+//   // check the user has a digipet to train
+  
+//   if (getDigipet()) {
+ 
+//     if ( 
+//       {
+//         happiness: INITIAL_DIGIPET.happiness > 10,
+//         nutrition: INITIAL_DIGIPET.nutrition > 10,
+//         discipline: INITIAL_DIGIPET.discipline > 10,
+//       })
+//       {
+//       ignoreDigipet();
+//       res.json({
+//         message: "You have ignored your digipet.",
+//         digipet: getDigipet(),
+//       });
+//     } else if ({
+//       happiness: INITIAL_DIGIPET.happiness <= 10,
+//       nutrition: INITIAL_DIGIPET.nutrition <= 10,
+//       discipline: INITIAL_DIGIPET.discipline <= 10,
+//     }) {
+//       ignoreDigipet();
+//       res.json({
+//         message: "You have ignored your digipet and one is at 10.",
+//         digipet: getDigipet(),
+//       });
+//     }
+   
+//   } else {
+//     res.json({
+//       message:
+//       "You don't have a digipet to ignore! Try hatching one with /digipet/hatch",
+//     });
+//   }
+// });
+
+app.get("/digipet/rehome", (req, res) => {
+  // check the user has a digipet to train
+  if (getDigipet()) {
+    rehomeDigipet();
+    res.json({
+      message: "You have rehomed your digipet. Feel free to hatch a new digipet!",
+      digipet: getDigipet(),
+    });
+  } else {
+    res.json({
+      message:
+        "You don't have a digipet to rehome! Try hatching one with /digipet/hatch",
+    });
+  }
+});
+
+/** 
+ * 
+ * 
+*/
+
 
 export default app;

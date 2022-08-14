@@ -74,3 +74,15 @@ export function updateDigipetBounded(
     setDigipet(digipetData);
   }
 }
+
+export function isIgnoreDigipetTen(
+  digipetKey: keyof Digipet,
+  netUpdate: number
+) {
+  const digipetData = getDigipet(); // is a shallow copy
+  if (digipetData) {
+    const valueToBound = digipetData[digipetKey] + netUpdate;
+    if (valueToBound > 10) {
+      return true
+  
+}}}

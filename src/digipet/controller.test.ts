@@ -3,10 +3,11 @@ import {
   hatchDigipet,
   trainDigipet,
   walkDigipet,
+  ignoreDigipet
 } from "./controller";
 import { getDigipet, INITIAL_DIGIPET, setDigipet } from "./model";
 
-describe.skip("feedDigipet", () => {
+describe("feedDigipet", () => {
   it("increases digipet nutrition by 10 and decreases discipline by 5", () => {
     // setup
     setDigipet(INITIAL_DIGIPET);
@@ -68,7 +69,7 @@ describe("hatchDigipet", () => {
   });
 });
 
-describe.skip("trainDigipet", () => {
+describe("trainDigipet", () => {
   it("increases digipet discipline by 10 and decreases happiness by 5", () => {
     // setup
     setDigipet(INITIAL_DIGIPET);
@@ -142,6 +143,57 @@ describe("walkDigipet", () => {
 
     // act
     walkDigipet();
+
+    // assert
+    expect(getDigipet()).toHaveProperty("nutrition", 0);
+  });
+});
+
+describe("ignoreDigipet", () => {
+  it("increases digipet discipline by 10 and decreases happiness by 5", () => {
+    // setup
+    setDigipet(INITIAL_DIGIPET);
+    expect(getDigipet()).toStrictEqual(INITIAL_DIGIPET);
+
+    // act
+    ignoreDigipet();
+
+    // assert
+    expect(getDigipet()).toStrictEqual({
+      happiness: INITIAL_DIGIPET.happiness - 10,
+      nutrition: INITIAL_DIGIPET.nutrition -10,
+      discipline: INITIAL_DIGIPET.discipline - 10,
+    });
+  });
+
+  it("cannot decrease discipline below 0", () => {
+    // setup
+    setDigipet({ happiness: 50, nutrition: 50, discipline: 0 });
+
+    // act
+    ignoreDigipet();
+
+    // assert
+    expect(getDigipet()).toHaveProperty("discipline", 0);
+  });
+
+  it("cannot decrease happiness below 0", () => {
+    // setup
+    setDigipet({ happiness: 0, nutrition: 50, discipline: 50 });
+
+    // act
+    ignoreDigipet();
+
+    // assert
+    expect(getDigipet()).toHaveProperty("happiness", 0);
+  });
+
+  it("cannot decrease nutrition below 0", () => {
+    // setup
+    setDigipet({ happiness: 50, nutrition: 0, discipline: 50 });
+
+    // act
+    ignoreDigipet();
 
     // assert
     expect(getDigipet()).toHaveProperty("nutrition", 0);
