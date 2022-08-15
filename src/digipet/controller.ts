@@ -46,8 +46,8 @@ export function ignoreDigipet(): void {
 
 }
 
-export function rehomeDigipet(): void {
-  getDigipet() == null
-
-}
+// export function rehomeDigipet(): void {
+//   let digipet = getDigipet()
+//  delete digipet.happiness
+// }
 

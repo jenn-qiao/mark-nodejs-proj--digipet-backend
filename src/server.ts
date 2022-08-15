@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { getDigipet,INITIAL_DIGIPET } from "./digipet/model";
-import { hatchDigipet, walkDigipet, trainDigipet, feedDigipet, ignoreDigipet, rehomeDigipet } from "./digipet/controller";
+import { getDigipet,setDigipet } from "./digipet/model";
+import { hatchDigipet, walkDigipet, trainDigipet, feedDigipet, ignoreDigipet } from "./digipet/controller";
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.get("/instructions", (req, res) => {
 
 app.get("/digipet", (req, res) => {
   const digipet = getDigipet();
-  if (digipet) {
+  if (digipet !== null) {
     res.json({
       message: "Your digipet is waiting for you!",
       digipet, // equivalent to digipet: digipet
@@ -41,7 +41,7 @@ app.get("/digipet", (req, res) => {
 
 app.get("/digipet/hatch", (req, res) => {
   const digipet = getDigipet();
-  if (digipet) {
+  if (digipet!== null) {
     res.json({
       message: "You can't hatch a digipet now because you already have one!",
       digipet,
@@ -58,7 +58,7 @@ app.get("/digipet/hatch", (req, res) => {
 
 app.get("/digipet/walk", (req, res) => {
   // check the user has a digipet to walk
-  if (getDigipet()) {
+  if (getDigipet() !== null) {
     walkDigipet();
     res.json({
       message: "You walked your digipet. It looks happier now!",
@@ -74,7 +74,7 @@ app.get("/digipet/walk", (req, res) => {
 
 app.get("/digipet/train", (req, res) => {
   // check the user has a digipet to train
-  if (getDigipet()) {
+  if (getDigipet()!== null) {
     trainDigipet();
     res.json({
       message: "You trained your digipet. It looks more trained now!",
@@ -90,7 +90,7 @@ app.get("/digipet/train", (req, res) => {
 
 app.get("/digipet/feed", (req, res) => {
   // check the user has a digipet to train
-  if (getDigipet()) {
+  if (getDigipet()!== null) {
     feedDigipet();
     res.json({
       message: "Feed your digipet. It will look more happy!",
@@ -168,7 +168,7 @@ app.get("/digipet/ignore", (req, res) => {
 app.get("/digipet/rehome", (req, res) => {
   // check the user has a digipet to train
   if (getDigipet()) {
-    rehomeDigipet();
+     setDigipet()
     res.json({
       message: "You have rehomed your digipet. Feel free to hatch a new digipet!",
       digipet: getDigipet(),
